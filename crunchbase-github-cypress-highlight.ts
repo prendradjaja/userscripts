@@ -28,37 +28,93 @@ function addCypressFinder() {
     allCypressElements.forEach((cypressElement) => {
       const failed = cypressElement.innerText.includes("Failures");
       if (failed) {
-        cypressElement.classList.add("pandu-userscript-ci-failure");
+        cypressElement.classList.add("pbr-ci-failure");
       } else {
-        cypressElement.classList.add("pandu-userscript-ci-success");
+        cypressElement.classList.add("pbr-ci-success");
       }
-      cypressElement.classList.add("pandu-userscript-ci-result");
+      cypressElement.classList.add("pbr-ci-result");
+
+      const linkElement = cypressElement.querySelector("p:first-of-type img")
+        .parentElement;
+      linkElement.removeAttribute("href");
+      linkElement.onclick = () =>
+        cypressElement.classList.toggle("pbr-ci-result-opened");
     });
-  }, 500);
+  }, 200);
 }
 
 function addCSS() {
   const css = (x) => x;
   GM_addStyle(css`
-    .pandu-userscript-ci-failure p:first-of-type {
+    .pbr-ci-failure p:first-of-type {
       background: #bb2929;
     }
 
-    .pandu-userscript-ci-success p:first-of-type {
+    .pbr-ci-success p:first-of-type {
       background: #67c05c;
     }
 
-    .pandu-userscript-ci-result p:first-of-type img {
+    .pbr-ci-result p:first-of-type img {
       filter: brightness(99);
     }
 
-    .pandu-userscript-ci-result p:first-of-type {
+    .pbr-ci-result p:first-of-type {
       margin-bottom: -12px; /* Set to -16px if jitter becomes a problem */
       padding-bottom: 16px;
     }
 
-    .pandu-userscript-ci-result p:first-of-type img {
+    .pbr-ci-result p:first-of-type img {
       background: transparent;
+    }
+
+    .pbr-ci-result {
+      position: absolute;
+      top: -9px;
+      right: 120px;
+      z-index: 99;
+      width: 120px;
+      height: 57px;
+      overflow: hidden;
+    }
+
+    .pbr-ci-result.pbr-ci-result-opened {
+      width: 500px;
+      height: auto;
+      top: 10px;
+      right: 10px;
+    }
+
+    .pbr-ci-result:not(.pbr-ci-result-opened) p:first-of-type {
+      line-height: 9px;
+    }
+
+    .pbr-ci-result:not(.pbr-ci-result-opened) p:first-of-type img {
+      max-height: 25px;
+      height: auto;
+      width: auto;
+    }
+
+    .pbr-ci-result:not(.pbr-ci-result-opened) .timeline-comment {
+      background: transparent;
+      border: none;
+    }
+
+    .pbr-ci-result .TimelineItem {
+      padding-top: 0;
+    }
+
+    .pbr-ci-result:not(.pbr-ci-result-opened) .timeline-comment-header {
+      display: none;
+    }
+
+    /* Hide the vertical line */
+    .pbr-ci-result .TimelineItem::before {
+      display: none;
+    }
+
+    /* Hide the avatar */
+    .pbr-ci-result .avatar-parent-child {
+      display: none;
     }
   `);
 }
