@@ -46,27 +46,25 @@ function addCypressFinder() {
 function addCSS() {
   const css = (x) => x;
   GM_addStyle(css`
+    /*** CORE FUNCTIONALITY (color-coding and image stuff) *******************/
     .pbr-ci-failure p:first-of-type {
       background: #bb2929;
     }
-
     .pbr-ci-success p:first-of-type {
       background: #67c05c;
     }
-
     .pbr-ci-result p:first-of-type img {
       filter: brightness(99);
     }
-
+    .pbr-ci-result p:first-of-type img {
+      background: transparent;
+    }
     .pbr-ci-result p:first-of-type {
       margin-bottom: -12px; /* Set to -16px if jitter becomes a problem */
       padding-bottom: 16px;
     }
 
-    .pbr-ci-result p:first-of-type img {
-      background: transparent;
-    }
-
+    /*** POSITIONING AND OPENED STATE ****************************************/
     .pbr-ci-result {
       position: absolute;
       top: -9px;
@@ -76,44 +74,36 @@ function addCSS() {
       height: 57px;
       overflow: hidden;
     }
-
     .pbr-ci-result.pbr-ci-result-opened {
       width: 500px;
       height: auto;
       top: 10px;
       right: 10px;
     }
-
     .pbr-ci-result:not(.pbr-ci-result-opened) p:first-of-type {
       line-height: 9px;
     }
-
     .pbr-ci-result:not(.pbr-ci-result-opened) p:first-of-type img {
       max-height: 25px;
       height: auto;
       width: auto;
     }
-
     .pbr-ci-result:not(.pbr-ci-result-opened) .timeline-comment {
       background: transparent;
       border: none;
     }
-
     .pbr-ci-result .TimelineItem {
       padding-top: 0;
     }
-
     .pbr-ci-result:not(.pbr-ci-result-opened) .timeline-comment-header {
       display: none;
     }
-
-    /* Hide the vertical line */
     .pbr-ci-result .TimelineItem::before {
+      /* Hide the vertical line */
       display: none;
     }
-
-    /* Hide the avatar */
     .pbr-ci-result .avatar-parent-child {
+      /* Hide the avatar */
       display: none;
     }
   `);
