@@ -13,7 +13,6 @@
 // TODO
 // . i bet i can use cypress for this
 // . handle promise rejection
-// . update README with the promise version
 // . tune the timeouts?
 
 const CONTROLLER_ID = "pbr-slack-away-controller";
@@ -65,6 +64,16 @@ async function sendMessage(text) {
   sendButton.click();
 }
 
+/**
+ * Repeatedly try document.querySelector until the element exists.
+ *
+ * Resolves once the queried element exists.
+ * If this never happens after `stopAfter` milliseconds, reject.
+ *
+ * @param selector A selector for document.querySelector.
+ * @param intervalTime Time (ms) to wait between queries.
+ * @param stopAfter Time (ms) until we give up and reject.
+ */
 async function queryUntilExists(selector, intervalTime, stopAfter) {
   return queryUntil(selector, () => true, intervalTime, stopAfter);
 }
@@ -73,8 +82,12 @@ async function queryUntilEnabled(selector, intervalTime, stopAfter) {
   return queryUntil(selector, (el) => !el.disabled, intervalTime, stopAfter);
 }
 
-// TODO docstring
-// "query until exists & predicate returns true"
+/**
+ * Like queryUntilExists, but a bit more general: wait until the element exists (call it `el`) AND
+ * `predicate(el)` returns true.
+ *
+ * If this never happens after `stopAfter` milliseconds, reject.
+ */
 async function queryUntil(selector, predicate, intervalTime, stopAfter) {
   return new Promise((resolve, reject) => {
     let reps = 0;
