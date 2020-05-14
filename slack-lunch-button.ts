@@ -15,8 +15,6 @@
 // . handle promise rejection
 // . tune the timeouts?
 
-const CONTROLLER_ID = "pbr-slack-away-controller";
-
 // Selectors
 const PRIMARY_VIEW = ".p-workspace__primary_view_contents";
 const EDITOR = ".ql-editor";
