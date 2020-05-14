@@ -10,6 +10,10 @@
 
 "use strict";
 
+// TODO
+// - Move the indicator into the sidebar
+// - If the test results are from an old commit, show that
+
 main();
 
 function main() {
