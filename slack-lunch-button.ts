@@ -23,8 +23,8 @@ const SEND_BUTTON = ".c-texty_input__button--send";
 function main() {
   const controller = document.createElement("div");
   controller.innerHTML = `
-  <button style="color: white">Lunch</button>
-  <button style="color: white">Back</button>`;
+    <button style="color: white">Lunch</button>
+    <button style="color: white">Back</button>`;
   const [awayBtn, backBtn] = controller.children;
   awayBtn.onclick = goAway;
   backBtn.onclick = comeBack;
