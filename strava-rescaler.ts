@@ -10,28 +10,85 @@
 
 "use strict";
 
-main();
+// TODO debug -- why doesn't it work e.g. on https://www.strava.com/activities/3442625725 with 10 & 12 top/bottom
+// - p sure the scale factor is right
+// - so is the transpose dist wrong?
 
-async function main() {
+const SECONDS_PER_MINUTE = 60;
+
+main();
+// window.getTransformParams = main;
+
+async function main(desiredConfig) {
+  desiredConfig = desiredConfig || {
+    topPace: 7.5 * SECONDS_PER_MINUTE,
+    bottomPace: 18 * SECONDS_PER_MINUTE,
+  };
+
   const chartSvg = document.querySelector(".chart svg");
   const chartGroup = chartSvg.querySelector("g.chartGroup");
   const { width, height } = chartGroup.getBoundingClientRect();
   const paceAxis = await queryUntilExists(chartSvg, "g.yaxis2", 100, 2000);
-  interpretPaceAxis(paceAxis);
+  const originalPaceAxis = interpretPaceAxis(paceAxis);
+  const desiredPaceScale = getDesiredPaceScale(height, desiredConfig);
+
+  // Compute transform params
+  const scaleFactor =
+    (desiredPaceScale(originalPaceAxis.bottomPace) -
+      desiredPaceScale(originalPaceAxis.topPace)) /
+    height;
+  const transposeDistance = desiredPaceScale(originalPaceAxis.topPace);
+
+  // return { scaleFactor, transposeDistance };
+
+  // Adjust pace series
+  const paceSeries = chartGroup.querySelector("#pace");
+  paceSeries.style.transform = `scaleY(${scaleFactor}) translateY(${transposeDistance}px)`;
+
+  // Adjust ticks
+  // TODO dedupe queryselector?
+  paceAxis.querySelectorAll(".tick").forEach((tick) => {
+    const { paceSeconds, yPos } = interpretPaceTick(tick);
+    const newY = desiredPaceScale(paceSeconds);
+    getTransformMatrix(tick).f = newY;
+  });
 }
 
 function interpretPaceAxis(paceAxis) {
   const ticks = Array.from(paceAxis.querySelectorAll(".tick"));
-  const [otherTick, lastTick] = ticks.slice(-2);
-  console.log("strava-graph-axes.ts under construction:");
-  console.log(interpretPaceTick(otherTick));
-  console.log(interpretPaceTick(lastTick));
+  const [otherTick, lastTick] = ticks.slice(-2).map(interpretPaceTick);
+  const scale = linearScale(otherTick, lastTick, {
+    x: "paceSeconds",
+    y: "yPos",
+  });
+  return {
+    scale,
+    topPace: scale.invert(0),
+    bottomPace: lastTick.paceSeconds,
+  };
+}
+
+function getDesiredPaceScale(height, desiredConfig) {
+  const p1 = {
+    paceSeconds: desiredConfig.topPace,
+    yPos: 0,
+  };
+  const p2 = {
+    paceSeconds: desiredConfig.bottomPace,
+    yPos: height,
+  };
+  const scale = linearScale(p1, p2, { x: "paceSeconds", y: "yPos" });
+  return scale;
 }
 
 function interpretPaceTick(tick) {
   const paceSeconds = parsePace(tick.textContent);
-  const yPos = tick.transform.baseVal.getItem(0).matrix.f;
+  const yPos = getTransformMatrix(tick).f;
   return { paceSeconds, yPos };
+}
+
+function getTransformMatrix(svgElement) {
+  return svgElement.transform.baseVal.getItem(0).matrix;
 }
 
 function parsePace(paceText) {
@@ -96,4 +153,20 @@ async function queryUntil(
       }
     }, intervalTime);
   });
+}
+
+/**
+ * Create a linear scale (similar to d3) from two {x, y} points
+ */
+function linearScale(p1, p2, attrsToPluck) {
+  attrsToPluck = attrsToPluck || { x: "x", y: "y" };
+  const p1x = p1[attrsToPluck.x];
+  const p1y = p1[attrsToPluck.y];
+  const p2x = p2[attrsToPluck.x];
+  const p2y = p2[attrsToPluck.y];
+  const m = (p2y - p1y) / (p2x - p1x);
+  const b = p1y - m * p1x;
+  const scale = (x) => m * x + b;
+  scale.invert = (y) => (y - b) / m;
+  return scale;
 }
