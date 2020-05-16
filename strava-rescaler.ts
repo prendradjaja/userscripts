@@ -43,7 +43,7 @@ async function main(desiredConfig) {
 
   // Adjust pace series
   const paceSeries = chartGroup.querySelector("#pace");
-  paceSeries.style.transform = `scaleY(${scaleFactor}) translateY(${transposeDistance}px)`;
+  paceSeries.style.transform = `translateY(${transposeDistance}px) scaleY(${scaleFactor})`;
 
   // Adjust ticks
   // TODO dedupe queryselector?
