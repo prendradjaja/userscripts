@@ -10,9 +10,11 @@
 
 "use strict";
 
-// TODO debug -- why doesn't it work e.g. on https://www.strava.com/activities/3442625725 with 10 & 12 top/bottom
-// - p sure the scale factor is right
-// - so is the transpose dist wrong?
+// TODO
+// - add an indicator to show it's been rescaled
+// - add a button to toggle rescaling?
+// - change the ticks to be what i want
+// - add my own gridlines
 
 const SECONDS_PER_MINUTE = 60;
 
@@ -52,6 +54,13 @@ async function main(desiredConfig) {
     const newY = desiredPaceScale(paceSeconds);
     getTransformMatrix(tick).f = newY;
   });
+
+  // Hide grid (since it's for the elevation axis)
+  chartGroup
+    .querySelectorAll("#grid line")
+    .forEach((line) => (line.style.display = "none"));
+
+  // TODO add my own grid for pace?
 }
 
 function interpretPaceAxis(paceAxis) {
