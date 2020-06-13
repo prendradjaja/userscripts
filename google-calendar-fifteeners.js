@@ -13,17 +13,22 @@
 // - Fifteen-minute events are super-narrow (instead of being as wide as a thirty-minute event)
 // - Resize handles on thirty-minute events are made narrower
 
-// TODO naming: differentiate classes and selectors
+/**
+ * CALENDAR_EVENT Returns events excluding all-day events
+ * Similar: .NlL62b returns all events including day-long events
+ */
 const CALENDAR_EVENT = ".EfQccc";
 const TEXT_SUMMARY = ".RIOtYe";
 const A11Y_TEXT_SUMMARY = ".ynRLnc";
 const RESIZE_HANDLE = ".leOeGd";
 
-const PBR_THIRTY = "pbr-thirty";
-const PBR_FIFTEENER = "pbr-fifteener";
+const PBR_FIFTEENER = ".pbr-fifteener";
+const PBR_THIRTY = ".pbr-thirty";
+const PBR_RIGHT_HALF = ".pbr-right-half";
 
-// Other unused classes:
-// EfQccc: Events including all-day events
+const PBR_FIFTEENER_CLASS = classSelectorToName(PBR_FIFTEENER);
+const PBR_THIRTY_CLASS = classSelectorToName(PBR_THIRTY);
+const PBR_RIGHT_HALF_CLASS = classSelectorToName(PBR_RIGHT_HALF);
 
 function main() {
   addCSS();
@@ -31,28 +36,27 @@ function main() {
 }
 
 function addCSS() {
-  // TODO extract css classes to variables
   var myCss = `
-      .${PBR_FIFTEENER} {
+      ${PBR_FIFTEENER} {
         height: 9px !important;
       }
 
-      .pbr-fifteener ${TEXT_SUMMARY} {
+      ${PBR_FIFTEENER} ${TEXT_SUMMARY} {
         margin-top: -7px;
         margin-left: -5px;
         font-size: 11px;
       }
 
-      .pbr-fifteener.pbr-right-half {
+      ${PBR_FIFTEENER}${PBR_RIGHT_HALF} {
         left: 20% !important;
         width: 80% !important;
       }
 
-      .pbr-fifteener ${RESIZE_HANDLE} {
+      ${PBR_FIFTEENER} ${RESIZE_HANDLE} {
         height: 4px; /* 4px is default */
       }
 
-      .pbr-thirty ${RESIZE_HANDLE} {
+      ${PBR_THIRTY} ${RESIZE_HANDLE} {
         height: 4px; /* 8px is default */
       }
 
@@ -78,15 +82,15 @@ function addFinders() {
         .innerText;
       const duration = getDuration(textDescription);
       if (duration <= 15) {
-        calendarEvent.classList.add(PBR_FIFTEENER);
+        calendarEvent.classList.add(PBR_FIFTEENER_CLASS);
         if (
           calendarEvent.style.left === "50%" &&
           calendarEvent.style.width === "50%"
         ) {
-          calendarEvent.classList.add("pbr-right-half");
+          calendarEvent.classList.add(PBR_RIGHT_HALF_CLASS);
         }
       } else if (duration <= 30) {
-        calendarEvent.classList.add(PBR_THIRTY);
+        calendarEvent.classList.add(PBR_THIRTY_CLASS);
       }
     });
   }, 1000);
@@ -123,6 +127,10 @@ function parseTime(t) {
     (pm ? 12 * 60 : 0) +
     (hours === 12 ? -12 * 60 : 0) // Account for 12pm and 12am
   );
+}
+
+function classSelectorToName(selector) {
+  return selector.slice(1);
 }
 
 main();
