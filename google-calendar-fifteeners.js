@@ -15,7 +15,7 @@
 
 // TODO naming: differentiate classes and selectors
 const CALENDAR_EVENT = ".EfQccc";
-const VISIBLE_TEXT_SUMMARY = ".RIOtYe";
+const TEXT_SUMMARY = ".RIOtYe";
 const A11Y_TEXT_SUMMARY = ".ynRLnc";
 const RESIZE_HANDLE = ".leOeGd";
 
@@ -37,7 +37,7 @@ function addCSS() {
         height: 9px !important;
       }
 
-      .pbr-fifteener ${VISIBLE_TEXT_SUMMARY} {
+      .pbr-fifteener ${TEXT_SUMMARY} {
         margin-top: -7px;
         margin-left: -5px;
         font-size: 11px;
