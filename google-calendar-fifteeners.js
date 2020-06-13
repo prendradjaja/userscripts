@@ -1,3 +1,14 @@
+// ==UserScript==
+// @name         New Userscript
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        https://calendar.google.com/calendar/*
+// @grant        none
+// ==/UserScript==
+"use strict";
+
 // TODO naming: differentiate classes and selectors
 const CALENDAR_EVENT = ".EfQccc";
 const TEXT_DESCRIPTION = ".ynRLnc";
@@ -6,20 +17,20 @@ const PBR_FIFTEENER = "pbr-fifteener";
 
 function main() {
   addCSS();
-  resizeFifteeners();
+  addFifteenerFinder();
 }
 
 function addCSS() {
   var myCss = `
-    .${PBR_FIFTEENER} {
-      height: 8px !important;
-    }
+      .${PBR_FIFTEENER} {
+        height: 8px !important;
+      }
 
-    .pbr-fifteener .RIOtYe {
-      margin-top: -6px;
-      font-size: 10px;
-    }
-  `;
+      .pbr-fifteener .RIOtYe {
+        margin-top: -6px;
+        font-size: 10px;
+      }
+    `;
   var head = document.head || document.getElementsByTagName("head")[0];
   var style = document.createElement("style");
   head.appendChild(style);
@@ -27,7 +38,7 @@ function addCSS() {
   style.appendChild(document.createTextNode(myCss));
 }
 
-function resizeFifteeners() {
+function addFifteenerFinder() {
   setInterval(() => {
     const allCalendarEvents = Array.from(
       document.querySelectorAll(CALENDAR_EVENT)
