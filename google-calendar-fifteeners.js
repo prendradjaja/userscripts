@@ -14,7 +14,6 @@
 // - Resize handles on thirty-minute events are made narrower
 
 // TODO naming: differentiate classes and selectors
-// TODO
 const CALENDAR_EVENT = ".EfQccc";
 const VISIBLE_TEXT_SUMMARY = ".RIOtYe";
 const A11Y_TEXT_SUMMARY = ".ynRLnc";
@@ -32,6 +31,7 @@ function main() {
 }
 
 function addCSS() {
+  // TODO extract css classes to variables
   var myCss = `
       .${PBR_FIFTEENER} {
         height: 9px !important;
