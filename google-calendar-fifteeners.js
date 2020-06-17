@@ -18,6 +18,7 @@
  * Similar: .NlL62b returns all events including day-long events
  */
 const CALENDAR_EVENT = ".EfQccc";
+const EVENT_BEING_DRAGGED = ".wbilU .EfQccc";
 const TEXT_SUMMARY = ".RIOtYe";
 const A11Y_TEXT_SUMMARY = ".ynRLnc";
 const RESIZE_HANDLE = ".leOeGd";
@@ -62,6 +63,10 @@ function addCSS() {
 
       ${RESIZE_HANDLE}:hover {
         background: rgba(255, 255, 255, 0.5);
+      }
+
+      ${EVENT_BEING_DRAGGED} {
+        opacity: 0.5 !important;
       }
     `;
   var head = document.head || document.getElementsByTagName("head")[0];
