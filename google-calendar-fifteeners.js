@@ -39,11 +39,11 @@ function main() {
 function addCSS() {
   var myCss = `
       ${PBR_FIFTEENER} {
-        height: 9px !important;
+        height: 11px !important;
       }
 
       ${PBR_FIFTEENER} ${TEXT_SUMMARY} {
-        margin-top: -7px;
+        margin-top: -6px;
         margin-left: -5px;
         font-size: 11px;
       }
