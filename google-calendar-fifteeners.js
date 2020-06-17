@@ -54,7 +54,7 @@ function addCSS() {
       }
 
       ${PBR_FIFTEENER} ${RESIZE_HANDLE} {
-        height: 4px; /* 4px is default */
+        height: 0px; /* 4px is default */
       }
 
       ${PBR_THIRTY} ${RESIZE_HANDLE} {
