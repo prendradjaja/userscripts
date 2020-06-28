@@ -45,7 +45,7 @@ function addCSS() {
       ${PBR_FIFTEENER} ${TEXT_SUMMARY} {
         margin-top: -6px;
         margin-left: -5px;
-        font-size: 11px;
+        font-size: 12px;
       }
 
       ${PBR_FIFTEENER}${PBR_RIGHT_HALF} {
