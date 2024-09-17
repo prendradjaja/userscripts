@@ -48,7 +48,7 @@ function addCSS() {
         font-size: 12px;
       }
 
-      ${PBR_FIFTEENER}${PBR_RIGHT_HALF} {
+      ${PBR_RIGHT_HALF} {
         left: 20% !important;
         width: 80% !important;
       }
@@ -97,17 +97,31 @@ function addFinders() {
       } else if (duration <= 30) {
         calendarEvent.classList.add(PBR_THIRTY_CLASS);
       }
+
+      const { start } = parseSummary(textDescription);
+      if (
+        start === 615 && // 615 = 10:15am
+        calendarEvent.style.left === "50%" &&
+        calendarEvent.style.width === "50%"
+      ) {
+        calendarEvent.classList.add(PBR_RIGHT_HALF_CLASS);
+      }
     });
   }, 1000);
 }
 
-function getDuration(textDescription) {
+function parseSummary(textDescription) {
   const matches = textDescription.match(/\d+(:\d+)?(am|pm)/g);
   if (!matches) {
     console.warn("No matches for", textDescription);
-    return 0;
+    return { start: 0, end: 0 };
   }
   const [start, end] = matches.map(parseTime);
+  return { start, end };
+}
+
+function getDuration(textDescription) {
+  const { start, end } = parseSummary(textDescription);
   return end - start;
 }
 
