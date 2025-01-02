@@ -35,7 +35,7 @@
         opacity: 0;
       }
       table.games {
-        dipslay: none;
+        display: none;
       }
     `);
   }
