@@ -13,16 +13,38 @@
   const $ = s => document.querySelector(s);
   const $$ = s => document.querySelectorAll(s);
 
+  let opponentColor;
+
   function main() {
     addCSS();
     document.addEventListener('keydown', event => {
       // todo Allow user to pick a color, then the AI only suggests moves on that color's turn
-      if (event.key === '`') {
+      if (event.key === ']') {
         event.preventDefault();
-        const weightedMoves = scrapeTable();
-        alert(selectRandomWeighted(weightedMoves));
+        handleGetMove();
       }
     });
+  }
+
+  function handleGetMove() {
+    const { colorToMove, weightedMoves } = scrapeTable();
+
+    if (opponentColor === undefined) {
+      opponentColor = colorToMove;
+    }
+
+    if (colorToMove !== opponentColor) {
+      return;
+    }
+
+    // Make a move
+    const move = selectRandomWeighted(weightedMoves);
+    const inputEl = $('.keyboard-move input');
+    inputEl.value = move; // todo For users other than me, maybe allow not using the keyboard input setting (i.e. just alert() maybe)
+    inputEl.focus();
+    setTimeout(() => {
+      inputEl.blur(); // Not necessarily needed for users other than me
+    }, 300);
   }
 
   function addCSS() {
@@ -41,10 +63,16 @@
   }
 
   function scrapeTable() {
+    // Scrape player-to-move
+    const tbody = $('.moves tbody');
+    const fen = tbody.getAttribute('data-fen');
+    const colorToMove = fen.split(' ')[1];
+
+    // Scrape moves
     const moveRows = Array.from($$('.moves tbody tr'))
       .filter(tr => !tr.classList.contains('sum'));
     const weightedMoves = moveRows.map(row => scrapeRow(row));
-    return weightedMoves;
+    return { colorToMove, weightedMoves };
   }
 
   function scrapeRow(row) {
