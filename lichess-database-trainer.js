@@ -14,16 +14,24 @@
   const $$ = s => document.querySelectorAll(s);
 
   let opponentColor;
+  let active = false;
 
   function main() {
-    addCSS();
     document.addEventListener('keydown', event => {
       // todo Allow user to pick a color, then the AI only suggests moves on that color's turn
       if (event.key === ']') {
         event.preventDefault();
-        handleGetMove();
+        handleOnlyKeyDown();
       }
     });
+  }
+
+  function handleOnlyKeyDown() {
+    if (!active) {
+      active = true;
+      addCSS();
+    }
+    handleGetMove();
   }
 
   function handleGetMove() {
