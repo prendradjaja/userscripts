@@ -19,7 +19,7 @@
   function main() {
     document.addEventListener('keydown', event => {
       // todo Allow user to pick a color, then the AI only suggests moves on that color's turn
-      if (event.key === ']') {
+      if (event.key === ']' || event.key === ';') {
         event.preventDefault();
         handleOnlyKeyDown();
       }
