@@ -58,14 +58,10 @@
   function addCSS() {
     const css = (x) => x;
     GM_addStyle(css`
-      .moves tbody tr {
+      .explorer-box div.title,
+      .explorer-box .moves,
+      .explorer-box .games {
         opacity: 0;
-      }
-      .explorer-box div.title {
-        opacity: 0;
-      }
-      table.games {
-        display: none;
       }
     `);
   }
